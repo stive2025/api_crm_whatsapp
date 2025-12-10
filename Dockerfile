@@ -69,15 +69,11 @@ RUN chown -R appuser:appuser /var/www/html \
     && chmod -R 755 /var/www/html/storage \
     && chmod -R 755 /var/www/html/bootstrap/cache
 
-# Configurar PHP
-COPY docker/php.ini /usr/local/etc/php/conf.d/custom.ini
-
-# Configurar Nginx
-COPY docker/nginx.conf /etc/nginx/nginx.conf
-COPY docker/default.conf /etc/nginx/http.d/default.conf
-
-# Configurar Supervisor
-COPY docker/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+# Copiar archivos de configuración Docker desde el contexto raíz
+COPY --chown=root:root ./docker/php.ini /usr/local/etc/php/conf.d/custom.ini
+COPY --chown=root:root ./docker/nginx.conf /etc/nginx/nginx.conf
+COPY --chown=root:root ./docker/default.conf /etc/nginx/http.d/default.conf
+COPY --chown=root:root ./docker/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
 # Crear directorios necesarios
 RUN mkdir -p /var/log/supervisor \

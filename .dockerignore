@@ -12,5 +12,4 @@ bin/.phpunit.result.cache
 docker-compose.yml
 Dockerfile
 .dockerignore
-docker/
 DOCKER_README.md
