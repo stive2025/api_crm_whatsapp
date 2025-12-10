@@ -30,25 +30,6 @@ services:
     networks:
       - laravel
 
-  websocket:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: laravel_websocket
-    restart: unless-stopped
-    command: php artisan websocket:serve
-    ports:
-      - "6001:6001"
-    volumes:
-      - ./bin/storage:/var/www/html/storage
-      - ./bin/.env:/var/www/html/.env
-    # Usar host.docker.internal para conectar al MySQL del host
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
-    depends_on:
-      - app
-      - redis
-
 networks:
   laravel:
     driver: bridge
