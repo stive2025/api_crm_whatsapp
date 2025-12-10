@@ -15,27 +15,11 @@ services:
     environment:
       - APP_ENV=production
       - APP_DEBUG=false
-    networks:
-      - laravel
+    # Usar host.docker.internal para conectar al MySQL del host
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     depends_on:
-      - db
       - redis
-
-  db:
-    image: mysql:8.0
-    container_name: laravel_db
-    restart: unless-stopped
-    environment:
-      MYSQL_DATABASE: ${DB_DATABASE:-laravel}
-      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD:-secret}
-      MYSQL_USER: ${DB_USERNAME:-laravel}
-      MYSQL_PASSWORD: ${DB_PASSWORD:-secret}
-    volumes:
-      - db_data:/var/lib/mysql
-    networks:
-      - laravel
-    ports:
-      - "3306:3306"
 
   redis:
     image: redis:7-alpine
@@ -58,8 +42,9 @@ services:
     volumes:
       - ./bin/storage:/var/www/html/storage
       - ./bin/.env:/var/www/html/.env
-    networks:
-      - laravel
+    # Usar host.docker.internal para conectar al MySQL del host
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     depends_on:
       - app
       - redis
@@ -67,7 +52,3 @@ services:
 networks:
   laravel:
     driver: bridge
-
-volumes:
-  db_data:
-    driver: local
