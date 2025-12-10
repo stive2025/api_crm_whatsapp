@@ -1,0 +1,73 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: laravel_app
+    restart: unless-stopped
+    ports:
+      - "8000:80"
+    volumes:
+      - ./bin/storage:/var/www/html/storage
+      - ./bin/.env:/var/www/html/.env
+    environment:
+      - APP_ENV=production
+      - APP_DEBUG=false
+    networks:
+      - laravel
+    depends_on:
+      - db
+      - redis
+
+  db:
+    image: mysql:8.0
+    container_name: laravel_db
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: ${DB_DATABASE:-laravel}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD:-secret}
+      MYSQL_USER: ${DB_USERNAME:-laravel}
+      MYSQL_PASSWORD: ${DB_PASSWORD:-secret}
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      - laravel
+    ports:
+      - "3306:3306"
+
+  redis:
+    image: redis:7-alpine
+    container_name: laravel_redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    networks:
+      - laravel
+
+  websocket:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: laravel_websocket
+    restart: unless-stopped
+    command: php artisan websocket:serve
+    ports:
+      - "6001:6001"
+    volumes:
+      - ./bin/storage:/var/www/html/storage
+      - ./bin/.env:/var/www/html/.env
+    networks:
+      - laravel
+    depends_on:
+      - app
+      - redis
+
+networks:
+  laravel:
+    driver: bridge
+
+volumes:
+  db_data:
+    driver: local

@@ -1,0 +1,16 @@
+bin/node_modules
+bin/vendor
+bin/storage/logs/*
+bin/storage/framework/cache/*
+bin/storage/framework/sessions/*
+bin/storage/framework/views/*
+bin/.env
+bin/.git
+bin/.phpunit.result.cache
+.git
+.gitignore
+docker-compose.yml
+Dockerfile
+.dockerignore
+docker/
+DOCKER_README.md
