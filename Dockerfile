@@ -80,12 +80,11 @@ RUN mkdir -p /var/log/supervisor \
     && mkdir -p /run/nginx \
     && chown -R appuser:appuser /var/log/supervisor
 
-# Optimizar Laravel
-RUN php artisan config:cache || true \
-    && php artisan route:cache || true \
-    && php artisan view:cache || true
+# Copiar script de entrypoint
+COPY --chown=root:root ./docker/entrypoint.sh /usr/local/bin/entrypoint.sh
+RUN chmod +x /usr/local/bin/entrypoint.sh
 
 EXPOSE 80
 
-# Usar supervisor para ejecutar nginx, php-fpm y websocket
-CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
+# Usar entrypoint para inicialización
+ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
