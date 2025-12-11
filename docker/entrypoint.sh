@@ -21,7 +21,7 @@ php artisan view:clear || true
 
 # Corregir permisos
 echo "🔒 Configurando permisos..."
-chown -R appuser:appuser /var/www/html/storage /var/www/html/bootstrap/cache 2>/dev/null || true
+chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache 2>/dev/null || true
 chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache 2>/dev/null || true
 
 echo "✅ Aplicación lista!"
