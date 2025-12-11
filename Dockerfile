@@ -60,8 +60,12 @@ RUN sed -i 's/listen = \/run\/php\/php8.2-fpm.sock/listen = 127.0.0.1:9000/' /et
 # Configurar permisos correctos para www-data
 RUN chown -R www-data:www-data /var/www/html/storage \
     && chown -R www-data:www-data /var/www/html/bootstrap/cache \
+    && chown -R www-data:www-data /var/www/html/public \
     && chmod -R 775 /var/www/html/storage \
-    && chmod -R 775 /var/www/html/bootstrap/cache
+    && chmod -R 775 /var/www/html/bootstrap/cache \
+    && chmod -R 775 /var/www/html/public \
+    && mkdir -p /var/www/html/public/files \
+    && chown -R www-data:www-data /var/www/html/public/files
 
 # Crear directorios necesarios
 RUN mkdir -p /var/log/supervisor \
