@@ -16,7 +16,7 @@ class UserController extends Controller
         return User::when(request()->filled('name'),function($query){
                 $query->where('name','REGEXP',request('name'));
             })
-            ->paginate(7);
+            ->paginate(100);
     }
 
     public function indexChats(Request $request)
