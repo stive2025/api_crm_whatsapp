@@ -38,6 +38,19 @@ class MessageController extends Controller
         if($request->from_me=="true"){
             Log::info('Message is from me, finding user_id by contact number.');
             $user_id=Contact::where('phone_number',$request->to)->first()->user_id;
+
+            if($user_id==null){
+                Log::error('No se encontró un usuario con @c.us ' . $request->to);
+                Log::info('Actualizando LID: ');
+                $chat = Chat::where('id',$request->chat_id)->first();
+                // Actualizamos el LID del contacto asociado al chat
+                $update_contact = Contact::where('id',$chat->contact_id)->update([
+                    'lid'=>$request->to
+                ]);
+                // Reintentamos obtener el user_id con el nuevo LID
+                $user_id=Contact::where('lid',$request->to)->first()->user_id;
+            }
+
         }else{
             $user_id=Connection::where('number',$request->to)->first()->user_id;
         }

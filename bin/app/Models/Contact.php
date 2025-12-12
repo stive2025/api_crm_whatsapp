@@ -15,12 +15,9 @@ class Contact extends Model
         'profile_picture',
         'user_id',
         'count_edits',
-        'sync_id'
+        'sync_id',
+        'lid'
     ];
-
-    public function folks(){
-        return $this->hasMany(Folk::class)->chaperone();
-    }
 
     public function messages(){
         return $this->hasMany(Message::class)->chaperone();

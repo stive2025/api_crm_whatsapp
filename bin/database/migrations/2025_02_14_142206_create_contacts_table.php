@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('profile_picture')->nullable();
             $table->string('sync_id')->nullable();
             $table->integer('count_edits')->nullable();
+            $table->string('lid')->nullable();
             $table->foreignId('user_id');
             $table->foreign('user_id')
                 ->references('id')
